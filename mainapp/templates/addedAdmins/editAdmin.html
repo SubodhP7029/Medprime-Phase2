@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+{% for message in messages %}
+<div style='color:black' class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+</div>
+{% endfor %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Add Customer</h6>
+            </div>
+            <div class="card-body">
+                <input type='hidden' id='idofuser' value="{{ user.id }}" />
+                <input type='hidden' id='currentnumber' value="{{ currentcounter }}" />
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                            <div class="form-group col-md-6">
+                               {{ adminform.adminname|as_crispy_field }} 
+                           </div>
+                              <div class="form-group col-md-6">
+                                {{ adminform.password|as_crispy_field }}
+                              </div>
+                    </div>
+                    <div class="form-row">
+                        
+                            <div class="form-group col-md-6">
+                               {{ adminform.institutiontype|as_crispy_field }}
+                           </div>
+                              <div class="form-group col-md-6">
+                                {{ adminform.institutionname|as_crispy_field }}
+                              </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_providers_{{ forloop.counter0 }}" class="col-form-label"><b>Test Allowed:</b></label>
+                        {% for value, text in adminform.testallowed.field.choices %}
+                    <div class="ui slider checkbox">
+                        <input id="id_providers_{{ forloop.counter0 }}" name="{{ adminform.testallowed.name }}" type="checkbox" value="{{ value }}"{% if value in checked_providers %} checked="checked"{% endif %}>
+                        <label>{{ text }}</label>
+                    </div>
+                    {% endfor %}
+                    </div>
+                    <!-- <div class="form-row">
+                        
+                        <div class="form-group col-md-6">
+                           {{ adminform.testallowed|as_crispy_field }}
+                       </div>
+                          
+                </div> -->
+ 
+                    {% comment %} {{ adminform|crispy }} {% endcomment %}
+
+    <div class='row'>
+        <div class='form-group'>
+            <button id='submitForm' type="submit" class="btn btn-primary btn-flat btn-addon m-b-10 m-l-5"><i
+                    class="ti-plus"></i>Add Admin </button>
+
+        </div>
+    </div>
+        </form>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div style='display:none'>
+    <form action="" method="post" id='invoice_to_db'>
+        {% csrf_token %}
+        {{ adminform.as_p }}
+        <input type="submit" value="Submit" id='saveDataToForm'>
+
+    </form>
+</div> -->
+
+
+
+
+{% endblock %}
